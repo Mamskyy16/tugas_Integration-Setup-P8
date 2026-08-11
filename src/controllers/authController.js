@@ -72,7 +72,7 @@ exports.loginUser = async (req, res) => {
                 nama: user.nama,
                 email: user.email,
             },
-            process.env.JWT_SECRET,
+            process.env.JWT_SECRET || "super_secret_key",
             {
                 expiresIn: "1h",
             }

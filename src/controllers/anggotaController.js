@@ -7,6 +7,7 @@ exports.getAllMahasiswa = async (req, res) => {
         const mahasiswaList = await db.select().from(MahasiswaTable);
         res.status(200).json(mahasiswaList);
     } catch (error) {
+        console.error("Error fetching mahasiswa:", error);
         res.status(500).json({ message: "Terjadi kesalahan server." });
     }
 };
@@ -21,13 +22,16 @@ exports.createMahasiswa = async (req, res) => {
 
         const [newMahasiswa] = await db.insert(MahasiswaTable).values({
             nama,
-            nim,
-            umur,
+            nim: String(nim),
+            umur: Number(umur),
             jurusan,
         }).returning();
 
         res.status(201).json({ message: "Mahasiswa berhasil dibuat.", mahasiswa: newMahasiswa });
     } catch (error) {
+        if (error.code === "23505") { // Unique violation error code for PostgreSQL
+            return res.status(400).json({ message: "NIM sudah terdaftar." });
+        }
         console.error("Error during creating mahasiswa:", error);
         res.status(500).json({ message: "Terjadi kesalahan server." });
     }

@@ -2,7 +2,7 @@ const { serial, integer, pgTable, varchar } = require("drizzle-orm/pg-core");
 
 const UsersTable = pgTable("users", {
     id: serial("id").primaryKey(),
-    nama: varchar("username", { length: 255 }).notNull(),
+    nama: varchar("nama", { length: 255 }).notNull(),
     email: varchar("email", { length: 255 }).notNull().unique(),
     password: varchar("password", { length: 255 }).notNull(),
 });
@@ -10,7 +10,7 @@ const UsersTable = pgTable("users", {
 const MahasiswaTable = pgTable("mahasiswa", {
     id: serial("id").primaryKey(),
     nama: varchar("nama", { length: 255 }).notNull(),
-    nim: integer("nim", { length: 20 }).notNull().unique(),
+    nim: varchar("nim", { length: 50 }).notNull().unique(),
     umur: integer("umur").notNull(),
     jurusan: varchar("jurusan", { length: 100 }).notNull(),
 });

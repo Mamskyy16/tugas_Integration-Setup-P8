@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsx watch src/server.js",
+    "start": "node server.js",
     "dev": "nodemon --exec tsx server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db:push": "drizzle-kit push"
   },
   "keywords": [],
   "author": "",

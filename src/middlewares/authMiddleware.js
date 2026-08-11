@@ -9,11 +9,12 @@ const verifyToken = (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const secret = process.env.JWT_SECRET || "super_secret_key";
+        const decoded = jwt.verify(token, secret);
         req.user = decoded; // Menyimpan informasi user yang terverifikasi ke dalam request object
         next();
     } catch (error) {
-        return res.status(400).json({ message: "Invalid token." });
+        return res.status(403).json({ message: "Invalid or expired token." });
     }
 };
 

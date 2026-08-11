@@ -1,0 +1,38 @@
+services:
+# PostgreSQL database container
+  postgres-db:
+    image: postgres:16-alpine
+    container_name: express_db_container
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: db_express
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d db_express"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+# Express.js node.js application container
+  web-app:
+    build: .
+    container_name: express_app_container
+    restart: always
+    environment:
+      PORT: 3000
+      DATABASE_URL: postgres://postgres:1234@postgres-db:5432/db_express
+      JWT_SECRET: super_secret_key
+    ports:
+      - "3000:3000"
+    command: sh -c "npm run db:push && npm start"
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
